@@ -1,0 +1,116 @@
+syntax = "proto3";
+package android_utils;
+option go_package = "github.com/BRUHItsABunny/go-android-utils";
+
+message AndroidID {
+  uint64 id = 1;
+}
+
+enum AndroidVersion {
+    AndroidVersion_NONE = 0;
+    V4_0 = 15;
+    V4_1 = 16;
+    V4_2 = 17;
+    V4_3 = 18;
+    V4_4 = 19;
+    V4_4W = 20;
+    V5_0 = 21;
+    V5_1 = 22;
+    V6_0 = 23;
+    V7_0 = 24;
+    V7_1 = 25;
+    V8_0 = 26;
+    V8_1 = 27;
+    V9_0 = 28;
+    V10_0 = 29;
+    V11_0 = 30;
+    V12_0 = 31;
+}
+
+enum LocationProvider {
+    LocationProvider_NONE = 0; // Treat as random
+    GPS = 1;
+    NETWORK = 2;
+    PASSIVE = 3;
+}
+
+message GPSLocation {
+  double longitude = 1;
+  double latitude = 2;
+  double altitude = 3;
+  LocationProvider provider = 4;
+}
+
+message Locale {
+  string language = 1;
+  string countryISO = 2;
+}
+
+message SIMCard {
+  // With or without country code?
+  string phoneNumber = 1;
+  // Provider and country information
+  string MCC = 2;
+  string MNC = 3;
+  string carrier = 4;
+  string countryISO = 5;
+  string countryCode = 6;
+  IMEI imei = 7;
+  MEID meid = 8;
+}
+
+message IMEI {
+  string TAC = 1;
+  // src: https://en.wikipedia.org/wiki/International_Mobile_Equipment_Identity
+  // AA	-	BB	BB	BB	-	CC	CC	CC	D
+  // Where AA and BB = TAC, CC = serial (randomized) and D = Luhn validation
+  string imei = 2;
+}
+
+message MEID {
+  string RegionCode = 1;
+  string ManufacturerCode = 2;
+  // src: https://en.wikipedia.org/wiki/Mobile_equipment_identifier
+  // R R	X	X	X	X	X	X	Z	Z	Z	Z	Z	Z	C
+  // Where R = region, X = manufacturer, Z = serial (randomized) and C = Luhn validation
+  string meid = 3;
+}
+
+message MAC {
+  string OUI = 1;
+  string address = 2;
+}
+
+message Timezone {
+  // IANA standard
+  string name = 1;
+}
+
+message DeviceSoftware {
+  map<string, string> softwareMetaData = 1;
+  // app package : version string
+  map<string, string> appMetaData = 2;
+}
+
+message Device {
+  AndroidID id = 1;
+  Locale locale = 2;
+  AndroidVersion version = 3;
+  string device = 4;
+  string manufacturer = 5;
+  string model = 6;
+  string product = 7;
+  string build = 8;
+  string type = 9;
+  string tags = 10;
+  string incrementalVersion = 11;
+  int32 DPI = 12;
+  int32 resolutionHorizontal = 13;
+  int32 resolutionVertical = 14;
+  repeated string abiList = 15;
+  GPSLocation location = 16;
+  Timezone timezone = 17;
+  repeated SIMCard simSlots = 18; // Dual SIM compatibility
+  MAC macAddress = 19;
+  DeviceSoftware software = 20;
+}
